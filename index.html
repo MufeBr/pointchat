@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="utf-8" />
@@ -25,6 +25,74 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+        }
+        /* TELA DE CARREGAMENTO */
+        
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            /* igual IG, pode trocar pra azul se quiser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        /* logo/spinner no meio */
+        
+        .loader-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: #000000;
+        }
+        
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 4px solid rgba(0, 0, 0, 0.15);
+            border-top-color: #000000;
+            animation: spin 0.9s linear infinite;
+        }
+        
+        .loader-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        /* "from PointChat Inc" lá embaixo */
+        
+        .loader-footer {
+            position: absolute;
+            bottom: 32px;
+            /* distancia da borda de baixo */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .loader-from {
+            font-size: 12px;
+            color: #7b7f8a;
+            /* cinzinha igual "from" do Meta */
+        }
+        
+        .loader-brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2f00ff;
+            /* escolhe a cor da sua marca */
+        }
+        /* animação do círculo */
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
         /* LOGIN */
         
@@ -198,11 +266,10 @@
             padding: 4px 12px 10px 12px;
             border-top: 1px solid #ddd;
         }
-        /* texto “está digitando...” colado na parte branca, canto esquerdo */
         
         #typingIndicator {
             font-size: 11px;
-            color: #000000;
+            color: #555;
             min-height: 14px;
             font-style: italic;
             display: flex;
@@ -315,10 +382,24 @@
 </head>
 
 <body>
+    <!-- TELA DE CARREGAMENTO -->
+    <div id="loading-screen">
+        <div class="loader-box">
+            <div class="loader-spinner"></div>
+            <div class="loader-text"></div>
+        </div>
+
+        <!-- CREDITOS IGUAL "from Meta" -->
+        <div class="loader-footer">
+            <span class="loader-from">from</span>
+            <span class="loader-brand">PointChat Inc</span>
+        </div>
+    </div>
+
     <!-- LOGIN -->
     <div id="login-screen">
         <div id="login-box">
-            <h2>PointChat</h2>
+            <h2>PointTalk</h2>
             <p class="muted">Primeiro, digite seu nome para participar nessa conversa online.</p>
             <div id="error-message">Digite seu nome antes de Entrar </div>
             <input id="username" placeholder="Your name" />
@@ -335,32 +416,24 @@
             <div id="badCounter"></div>
             <div id="muteTimer"></div>
         </div>
-
         <div class="chat-top-bar">
             <span class="room-name"></span>
         </div>
-
         <div class="chat-box" id="chatBox"></div>
-
         <div class="input-area">
-            <!-- “Fulano está digitando...” AQUI -->
             <div id="typingIndicator"></div>
-
             <div class="input-fixed">
                 <button id="emojiBtn">😀</button>
-
                 <button id="clearChatBtn" aria-label="Limpar chat">
-            <svg viewBox="0 0 24 24" width="22" height="22">
-                <path
-                    d="M3 6h18v2H3V6zm2 3h14l-1.5 11.5a2 2 0 0 1-2 1.5h-7a2 2 0 0 1-2-1.5L5 9zm5 2v8h2v-8H10zm4 0v8h2v-8h-2zM9 4h6v2H9V4z" />
-            </svg>
-        </button>
-
-                <input id="chatInput" placeholder="Message" disabled />
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                        <path
+                            d="M3 6h18v2H3V6zm2 3h14l-1.5 11.5a2 2 0 0 1-2 1.5h-7a2 2 0 0 1-2-1.5L5 9zm5 2v8h2v-8H10zm4 0v8h2v-8h-2zM9 4h6v2H9V4z" />
+                    </svg>
+                </button>
+                <input id="chatInput" placeholder="Digita sua mensagem" disabled />
                 <button id="chatSend" type="button">Enviar</button>
             </div>
         </div>
-
         <!-- EMOJIS -->
         <div id="emojiPicker">
             <span class="emoji">😀</span>
@@ -378,7 +451,6 @@
             <span class="emoji">🙌</span>
             <span class="emoji">💯</span>
         </div>
-
         <!-- ALERT PANEL -->
         <div id="alertPanel">
             <div>
@@ -390,15 +462,15 @@
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
         <script>
-            const GEMINI_API_KEY = "AIzaSyCr6hyLCU4jtN1iJi_omeK2hed-sXep4LI";
+            const GEMINI_API_KEY = "AIzaSyAXapWvlUrbk9XIfXJsxy78KsQvlA4LFuc";
             const firebaseConfig = {
                 apiKey: "AIzaSyB4U9ZnUPJBFhjsoXDWeoATLMcIz0cWgzo",
                 authDomain: "apike-99bd4.firebaseapp.com",
                 databaseURL: "https://apike-99bd4-default-rtdb.firebaseio.com",
                 projectId: "apike-99bd4",
-                storageBucket: "apike-99bd4.appspot.com",
+                storageBucket: "apike-99bd4.firebasestorage.appspot.com",
                 messagingSenderId: "299668106950",
-                appId: "1:299668106950:web:a2b7c3250f8070640e31c7"
+                appId: "1:299668106950:web:a2b7c3250f8070640e31c7",
             };
             firebase.initializeApp(firebaseConfig);
             const db = firebase.database();
@@ -410,6 +482,7 @@
             const BAD_LIMIT = 5;
             let muteUntil = 0;
             let muteInterval = null;
+            const loadingScreen = document.getElementById("loading-screen");
             const loginScreen = document.getElementById("login-screen");
             const loginBtn = document.getElementById("loginBtn");
             const usernameInput = document.getElementById("username");
@@ -462,7 +535,8 @@
                                     }]
                                 }]
                             })
-                        });
+                        }
+                    );
                     const data = await resp.json();
                     let out = "";
                     if (
@@ -510,7 +584,6 @@
                     clearInterval(muteInterval);
                     muteInterval = null;
                 }
-                muteTimerLabel.textContent = `Silenciado devido uso linguagem imprópria: ${formatRemaining()}`;
                 muteInterval = setInterval(() => {
                     if (!isMuted()) {
                         clearInterval(muteInterval);
@@ -521,7 +594,8 @@
                         addSystemMsg("Seu silenciamento foi liberado para volta ao chat");
                         return;
                     }
-                    muteTimerLabel.textContent = ` Você foi silenciado pelo chat por ${formatRemaining()}`;
+                    muteTimerLabel.textContent =
+                        `Silenciado devido uso linguagem imprópria: ${formatRemaining()}`;
                 }, 1000);
             }
             function applyMuteState() {
@@ -542,28 +616,23 @@
                     ts: Date.now()
                 });
             }
-            function updateTypingIndicatorFromSnapshot(snapshot) {
-                const data = snapshot.val() || {};
+            function updateTypingIndicatorFromSnapshot(snap) {
                 const typingUsers = [];
-                Object.keys(data).forEach(id => {
-                    const info = data[id];
-                    if (!info) return;
-                    if (id === userId) return;
-                    if (info.typing) {
-                        typingUsers.push(info.username || "Alguém");
-                    }
-                });
-
+                const data = snap.val();
+                if (data) {
+                    Object.keys(data).forEach(uid => {
+                        if (data[uid].typing && data[uid].username !== username) {
+                            typingUsers.push(data[uid].username);
+                        }
+                    });
+                }
                 if (typingUsers.length === 0) {
                     typingIndicator.textContent = "";
                 } else if (typingUsers.length === 1) {
                     typingIndicator.textContent = `${typingUsers[0]} está digitando...`;
-                } else if (typingUsers.length === 2) {
-                    typingIndicator.textContent = `${typingUsers[0]} e ${typingUsers[1]} estão digitando...`;
                 } else {
-                    typingIndicator.textContent = `${typingUsers[0]}, ${typingUsers[1]} e outros estão digitando...`;
+                    typingIndicator.textContent = `${typingUsers.join(", ")} estão digitando...`;
                 }
-
             }
             function listenTyping() {
                 db.ref(TYPING_PATH).on("value", snap => {
@@ -579,6 +648,7 @@
                     }
                 });
             }
+            // LOGIN
             loginBtn.onclick = () => {
                 username = usernameInput.value.trim();
                 if (!username) {
@@ -603,6 +673,7 @@
                 listenMessages();
                 listenTyping();
             };
+            // ENVIAR MENSAGEM
             chatSend.onclick = async() => {
                 if (isMuted()) {
                     addSystemMsg(`Você está silenciado. Aguarde terminar o tempo.`);
@@ -624,7 +695,7 @@
                         badCount++;
                         updateBadCounter();
                         myBubble.classList.add("msg-blocked");
-                        myBubble.innerHTML = `<b>${username}:</b> [blocked by moderation]`;
+                        myBubble.innerHTML = `<b>${username}:</b> [bloqueado por moderação]`;
                         ref.remove();
                         if (badCount >= BAD_LIMIT && !isMuted()) {
                             const TEN_MIN = 10 * 60 * 1000;
@@ -632,11 +703,11 @@
                             applyMuteState();
                             addSystemMsg("Suspensão por 9 minutos");
                             alertText.innerHTML = `
-                            !<br>
-                            CHAT SUSPENSO<br><br>
-                            🚫 Suspensão por 9 minutos<br>
-                            Desativamos seu bate-papo no chat porque você pode ter usado linguagem que quebra as regras do Site
-                        `;
+                        !<br>
+                        CHAT SUSPENSO<br><br>
+                        🚫 Suspensão por 9 minutos<br>
+                        Desativamos seu bate-papo no chat porque você pode ter usado linguagem que quebra as regras do Site
+                    `;
                             alertPanel.style.display = "flex";
                             alertBtn.onclick = () => {
                                 alertPanel.style.display = "none";
@@ -661,16 +732,20 @@
                     setTypingState(false);
                 }, 1500);
             });
+            // ===== LIXEIRA / LIMPAR CHAT =====
             clearChatBtn.onclick = () => {
-                db.ref(GENERAL_ROOM_PATH).remove()
-                    .then(() => {
-                        chatBox.innerHTML = "";
-                    })
+                // 1) Limpa imediatamente na tela
+                chatBox.innerHTML = "";
+                // 2) Tenta apagar no Firebase (servidor)
+                db.ref(GENERAL_ROOM_PATH)
+                    .remove()
+                    .then(() => {})
                     .catch(err => {
                         console.error("Erro ao limpar chat:", err);
-                        addSystemMsg("Erro ao limpar o chat.");
+                        addSystemMsg("Não foi possível apagar do servidor, só limpou para você.");
                     });
             };
+            // ===== EMOJIS =====
             emojiBtn.onclick = () => {
                 if (emojiPicker.style.display === "flex") {
                     emojiPicker.style.display = "none";
@@ -683,6 +758,16 @@
                     chatInput.value += e.target.textContent;
                     chatInput.focus();
                 }
+            });
+            // TIRAR TELA DE CARREGAMENTO QUANDO A PÁGINA TERMINAR DE CARREGAR
+            window.addEventListener("load", () => {
+                setTimeout(() => {
+                    loadingScreen.style.transition = "opacity 0.4s ease";
+                    loadingScreen.style.opacity = "0";
+                    setTimeout(() => {
+                        loadingScreen.style.display = "none";
+                    }, 400);
+                }, 1200);
             });
         </script>
 </body>
